@@ -23,3 +23,9 @@ exports.update = async (key, value, newValue) => {
     Object.assign(entry, newValue);
   }
 };
+
+module.exports = {
+  find,
+  update,
+  list,
+};

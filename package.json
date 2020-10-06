@@ -9,12 +9,20 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "jest": "^26.5.0"
+    "jest": "^26.5.0",
+    "supertest": "^5.0.0"
   },
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  }
 }
