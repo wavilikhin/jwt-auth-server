@@ -4,7 +4,9 @@ const User = require('../model/user');
 
 const jwt = require('jsonwebtoken');
 const { v4: uuid } = require('uuid');
-const { compareSync } = require('bcryptjs');
+const { compareSync, hashSync } = require('bcryptjs');
+
+const validateEmail = require('../helpers/validateEmail');
 
 async function issueTokenPair(userId) {
   const newRefreshToken = uuid();
@@ -20,23 +22,61 @@ async function issueTokenPair(userId) {
   };
 }
 
-async function loginUser(req, res) {
-  const { email, password } = req.body;
+async function signinUser(req, res) {
+  const { email, password, confirmedPassword } = req.body;
 
-  await new User({
-    id: 2,
-    email: email,
-    password: password,
-  }).save();
+  if (!email || !password || !confirmedPassword) {
+    console.log('1');
+    return res.sendStatus(403);
+  }
+
+  if (!validateEmail(email)) {
+    console.log('2');
+    return res.sendStatus(403);
+  }
 
   const user = await User.findOne({ email }).lean();
 
-  console.log(user, password);
-  // TODO: Test with compare sync
-  if (!user || !password === user.password) {
-    const error = new Error();
-    error.status = 403;
-    throw error;
+  if (user) {
+    console.log('3');
+    return res.sendStatus(403);
+  }
+
+  if (!password === confirmedPassword) {
+    console.log('4');
+    return res.sendStatus(403);
+  }
+
+  const newUser = {
+    id: uuid(),
+    email,
+    password: hashSync(password, 8),
+  };
+
+  await new User(newUser).save();
+
+  return res.sendStatus(201);
+}
+
+async function loginUser(req, res) {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.sendStatus(403);
+  }
+
+  if (!validateEmail(email)) {
+    return res.sendStatus(403);
+  }
+
+  const user = await User.findOne({ email }).lean();
+  console.log(user);
+
+  if (!user || !compareSync(password, user.password)) {
+    // const error = new Error();
+    // error.status = 403;
+    // throw error;
+    return res.sendStatus(404);
   }
 
   const tokenPair = await issueTokenPair(user.id);
@@ -44,4 +84,4 @@ async function loginUser(req, res) {
   return res.status(200).json(tokenPair);
 }
 
-module.exports = { loginUser };
+module.exports = { loginUser, signinUser };

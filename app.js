@@ -15,7 +15,6 @@ app.listen(PORT, () => {});
 app.use('/users', require('./source/routes/users/users'));
 app.use('/auth', require('./source/routes/auth/auth'));
 
-// TODO: 1. User can login
 // TODO: 2. User recieves 401 on expired token
 // TODO: 3. User can update access token using refresh token
 // TODO: 4. User can use refresh token only once
