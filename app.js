@@ -8,14 +8,17 @@ const PORT = process.env.PORT;
 const mongoose = require('mongoose');
 const mongoConfig = require('./config/mongo.config');
 
+const helmet = require('helmet');
+const morgan = require('morgan');
 const jwtAuthStrategy = require('express-jwt');
-
 const errorsHandler = require('./source/middleware/errorsHandler');
 
 mongoose.connect(mongoConfig.url, mongoConfig.options);
 
 app.listen(PORT, () => {});
 
+app.use(helmet());
+app.use(process.env.MODE === 'dev' ? morgan('dev') : morgan('combined'));
 app.use('/auth', require('./source/routes/auth/auth'));
 app.use(
   jwtAuthStrategy({

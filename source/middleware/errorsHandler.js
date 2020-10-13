@@ -17,4 +17,6 @@ const errorsHandler = (err, req, res, next) => {
   }
 };
 
+// TODO: Добавить логгирущую мидлвару для ошибок (с записью в базу?)
+
 module.exports = errorsHandler;
