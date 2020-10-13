@@ -1,4 +1,4 @@
-const accessTokenSecret = require('../../config/jwt.config');
+const { accessTokenSecret, options } = require('../../config/jwt.config');
 const RefreshToken = require('../model/refreshTokens');
 const User = require('../model/user');
 
@@ -7,6 +7,7 @@ const { v4: uuid } = require('uuid');
 const { compareSync, hashSync } = require('bcryptjs');
 
 const validateEmail = require('../helpers/validateEmail');
+const ErrorResponse = require('../helpers/errorResponse');
 
 async function issueTokenPair(userId) {
   const newRefreshToken = uuid();
@@ -17,34 +18,30 @@ async function issueTokenPair(userId) {
   }).save();
 
   return {
-    token: jwt.sign({ id: userId }, accessTokenSecret),
+    token: jwt.sign({ id: userId }, accessTokenSecret, options),
     refreshToken: newRefreshToken,
   };
 }
 
-async function signinUser(req, res) {
+async function signinUser(req, res, next) {
   const { email, password, confirmedPassword } = req.body;
 
   if (!email || !password || !confirmedPassword) {
-    console.log('1');
-    return res.sendStatus(403);
+    return next(new ErrorResponse());
   }
 
   if (!validateEmail(email)) {
-    console.log('2');
-    return res.sendStatus(403);
+    return next(new ErrorResponse());
   }
 
   const user = await User.findOne({ email }).lean();
 
   if (user) {
-    console.log('3');
-    return res.sendStatus(403);
+    return next(new ErrorResponse());
   }
 
   if (!password === confirmedPassword) {
-    console.log('4');
-    return res.sendStatus(403);
+    return next(new ErrorResponse());
   }
 
   const newUser = {
@@ -58,25 +55,21 @@ async function signinUser(req, res) {
   return res.sendStatus(201);
 }
 
-async function loginUser(req, res) {
+async function loginUser(req, res, next) {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.sendStatus(403);
+    return next(new ErrorResponse());
   }
 
   if (!validateEmail(email)) {
-    return res.sendStatus(403);
+    return next(new ErrorResponse());
   }
 
   const user = await User.findOne({ email }).lean();
-  console.log(user);
 
   if (!user || !compareSync(password, user.password)) {
-    // const error = new Error();
-    // error.status = 403;
-    // throw error;
-    return res.sendStatus(404);
+    return next(new ErrorResponse('NoEnt', 404));
   }
 
   const tokenPair = await issueTokenPair(user.id);
@@ -84,4 +77,19 @@ async function loginUser(req, res) {
   return res.status(200).json(tokenPair);
 }
 
-module.exports = { loginUser, signinUser };
+async function refresh(req, res, next) {
+  const { refreshToken } = req.body;
+
+  const dbToken = await RefreshToken.findOne({ refresh_token: refreshToken });
+
+  if (!dbToken) {
+    return next(new ErrorResponse(`NoEnt`, 404));
+  }
+
+  const tokenPair = await issueTokenPair(dbToken.user_id);
+  await dbToken.remove();
+
+  return res.status(200).json(tokenPair);
+}
+
+module.exports = { loginUser, signinUser, refresh };

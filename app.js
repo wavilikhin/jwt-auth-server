@@ -8,15 +8,22 @@ const PORT = process.env.PORT;
 const mongoose = require('mongoose');
 const mongoConfig = require('./config/mongo.config');
 
+const jwtAuthStrategy = require('express-jwt');
+
+const errorsHandler = require('./source/middleware/errorsHandler');
+
 mongoose.connect(mongoConfig.url, mongoConfig.options);
 
 app.listen(PORT, () => {});
 
-app.use('/users', require('./source/routes/users/users'));
 app.use('/auth', require('./source/routes/auth/auth'));
-
-// TODO: 2. User recieves 401 on expired token
-// TODO: 3. User can update access token using refresh token
-// TODO: 4. User can use refresh token only once
-// TODO: 5. Refresh tokens becomes invalid on logout
-// TODO: 6. Multiple refresh tokens are valid
+app.use(
+  jwtAuthStrategy({
+    secret: require('./config/jwt.config').accessTokenSecret,
+    algorithms: ['HS256'],
+  })
+);
+//  TODO: Зачекать мидлваре:
+// https://github.com/MichielDeMey/express-jwt-permissions
+app.use('/users', require('./source/routes/users/users'));
+app.use(errorsHandler);
