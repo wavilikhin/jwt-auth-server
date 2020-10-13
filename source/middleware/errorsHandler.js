@@ -12,6 +12,10 @@ const errorsHandler = (err, req, res, next) => {
       res.sendStatus(err.statusCode || 404);
       break;
 
+    case 'CorsError':
+      res.sendStatus(err.statusCode || 500);
+      break;
+
     default:
       res.sendStatus(500);
   }
