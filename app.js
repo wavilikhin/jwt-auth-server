@@ -26,7 +26,7 @@ app.use(
     algorithms: ['HS256'],
   })
 );
-//  TODO: Зачекать мидлваре:
+//  TODO: Зачекать мидлваре для админки:
 // https://github.com/MichielDeMey/express-jwt-permissions
 app.use('/users', require('./source/routes/users/users'));
 app.use(errorsHandler);
