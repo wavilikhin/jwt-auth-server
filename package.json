@@ -14,11 +14,14 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.8",
     "morgan": "^1.10.0",
+    "swagger-jsdoc": "^4.3.0",
+    "swagger-ui-express": "^4.1.4",
     "uuid": "^8.3.1"
   },
   "devDependencies": {},
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "NODE_ENV=dev nodemon app.js",
+    "prod": "NODE_ENV=prod node app.js"
   },
   "keywords": [],
   "author": "",

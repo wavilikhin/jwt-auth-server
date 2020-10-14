@@ -8,13 +8,14 @@ const PORT = process.env.PORT;
 const mongoose = require('mongoose');
 const mongoConfig = require('./config/mongo.config');
 
-// const cors = require('cors');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDoc = swaggerJsDoc(require('./swagger.config'));
+
 const helmet = require('helmet');
 const morgan = require('morgan');
 const jwtAuthStrategy = require('express-jwt');
 const errorsHandler = require('./source/middleware/errorsHandler');
-
-const ErrorResponse = require('./source/helpers/errorResponse');
 
 mongoose.connect(mongoConfig.url, mongoConfig.options);
 
@@ -22,7 +23,9 @@ app.listen(PORT);
 
 app.use(process.env.MODE === 'dev' ? morgan('dev') : morgan('combined'));
 app.use(helmet());
-// app.use(cors(corsOptions));
+
+app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+
 app.use('/auth', require('./source/routes/auth/auth'));
 app.use(
   jwtAuthStrategy({
