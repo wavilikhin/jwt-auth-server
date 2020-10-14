@@ -9,8 +9,6 @@ const mongoose = require('mongoose');
 const mongoConfig = require('./config/mongo.config');
 
 const swaggerJsDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
-const swaggerDoc = swaggerJsDoc(require('./swagger.config'));
 
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -23,8 +21,6 @@ app.listen(PORT);
 
 app.use(process.env.MODE === 'dev' ? morgan('dev') : morgan('combined'));
 app.use(helmet());
-
-app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.use('/auth', require('./source/routes/auth/auth'));
 app.use(

@@ -19,10 +19,13 @@ const { loginUser, signinUser, refresh } = require('../../controllers/auth');
  *            properties:
  *              email:
  *                type: string
+ *                required: true
  *              password:
  *                type: string
+ *                required: true
  *              confirmedPassword:
  *                type: string
+ *                required: true
  *    responses:
  *      '201':
  *        description: Provided cridential are valid, user successfully created.
@@ -45,8 +48,10 @@ router.post('/signin', bodyParser.json(), signinUser);
  *            properties:
  *              email:
  *                type: string
+ *                required: true
  *              password:
  *                type: string
+ *                required: true
  *    responses:
  *      '200':
  *        description: Provided cridential are valid, user successfully logged in.
@@ -80,6 +85,7 @@ router.post('/login', bodyParser.json(), loginUser);
  *            properties:
  *              refreshToken:
  *                type: string
+ *                required: true
  *    responses:
  *      '200':
  *        description: Provided refresh token is valid.

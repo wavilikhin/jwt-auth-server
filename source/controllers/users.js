@@ -23,7 +23,6 @@ async function logOut(req, res) {
   const refreshTokens = await RefreshToken.find({ user_id: id });
 
   if (refreshTokens) {
-    console.log(refreshTokens.length);
     refreshTokens.forEach(async (token) => {
       await token.remove();
     });
