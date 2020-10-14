@@ -4,3 +4,4 @@ config/**
 mongo-data
 .vscode
 .todo.txt
+nginx/logs
