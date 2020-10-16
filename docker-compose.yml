@@ -5,6 +5,8 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/logs:/etc/nginx/logs
+    ports:
+      - '80:80'
 
   mongo:
     image: mongo
@@ -19,8 +21,6 @@ services:
       - ./server/app.js:/server/app.js
       - ./server/config/:/server/config
       - ./server/source/:/server/source
-    ports:
-      - '${PORT}:${PORT}'
     command: /bin/sh -c "npm run ${MODE}"
     depends_on:
       - mongo
