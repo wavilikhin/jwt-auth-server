@@ -9,6 +9,8 @@ const { compareSync, hashSync } = require('bcryptjs');
 const validateEmail = require('../helpers/validateEmail');
 const ErrorResponse = require('../helpers/errorResponse');
 
+const { assertSignIn } = require('../model/joi');
+
 async function issueTokenPair(userId) {
   const newRefreshToken = uuid();
 
@@ -24,6 +26,12 @@ async function issueTokenPair(userId) {
 }
 
 async function signinUser(req, res, next) {
+  // try {
+  //   assertSignIn(req.body);
+  // } catch (error) {
+  //   return next(new ErrorResponse());
+  // }
+
   const { email, password, confirmedPassword } = req.body;
 
   if (!email || !password || !confirmedPassword) {
