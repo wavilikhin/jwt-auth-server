@@ -1,7 +1,7 @@
-node_modules
-.env
-config/**
 mongo-data
 .vscode
 .todo.txt
 nginx/logs
+server/node_modules
+server/.env
+server/config/**

@@ -13,12 +13,12 @@ services:
       - ./mongo-data:/data/db
 
   auth_server:
-    build: ./
+    build: ./server
     container_name: auth_server
     volumes:
-      - ./app.js:/server/app.js
-      - ./config/:/server/config
-      - ./source/:/server/source
+      - ./server/app.js:/server/app.js
+      - ./server/config/:/server/config
+      - ./server/source/:/server/source
     ports:
       - '${PORT}:${PORT}'
     command: /bin/sh -c "npm run ${MODE}"
