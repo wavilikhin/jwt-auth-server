@@ -1,23 +1,33 @@
-const Joi = require('joi');
-const ErrorResponse = require('./errorsHandler');
+const { assert } = require('joi');
+const ErrorResponse = require('../helpers/errorResponse');
 
-const signInSchema = Joi.object({
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ['com', 'net', 'ru'] },
-  }),
+const { signInSchema, logInSchema, refreshSchema } = require('../model/joi');
 
-  password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
-
-  confirmedPassword: Joi.ref('password'),
-}).with('password', 'confirmedPassword');
-
-function assertSignIn(err, req, res, next, schema) {
+function assertSignIn(req, res, next) {
   try {
-    Joi.assert(req.body, schema);
+    assert(req.body, signInSchema);
   } catch (error) {
-    return next(new ErrorResponse());
+    next(new ErrorResponse('JoiError', 403));
   }
+  next();
+}
+function assertLogIn(req, res, next) {
+  try {
+    console.log('trying to assert login');
+    assert(req.body, logInSchema);
+  } catch (error) {
+    console.log('login error');
+    next(new ErrorResponse('JoiError', 403));
+  }
+  next();
+}
+function assertRefresh(req, res, next) {
+  try {
+    assert(req.body, refreshSchema);
+  } catch (error) {
+    next(new ErrorResponse('JoiError', 403));
+  }
+  next();
 }
 
-module.exports = { assertSignIn };
+module.exports = { assertSignIn, assertLogIn, assertRefresh };

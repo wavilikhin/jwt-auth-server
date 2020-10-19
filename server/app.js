@@ -43,7 +43,6 @@ app.listen(PORT);
 app.use(process.env.MODE === 'dev' ? morgan('dev') : morgan('combined'));
 // app.use(cors(corsOptions));
 app.use(helmet());
-
 app.use('/auth', require('./source/routes/auth/auth'));
 app.use(
   jwtAuthStrategy({
@@ -51,6 +50,5 @@ app.use(
     algorithms: ['HS256'],
   })
 );
-
 app.use('/users', require('./source/routes/users/users'));
 app.use(errorsHandler);

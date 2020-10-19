@@ -26,12 +26,6 @@ async function issueTokenPair(userId) {
 }
 
 async function signinUser(req, res, next) {
-  // try {
-  //   assertSignIn(req.body);
-  // } catch (error) {
-  //   return next(new ErrorResponse());
-  // }
-
   const { email, password, confirmedPassword } = req.body;
 
   if (!email || !password || !confirmedPassword) {
@@ -65,7 +59,6 @@ async function signinUser(req, res, next) {
 
 async function loginUser(req, res, next) {
   const { email, password } = req.body;
-
   if (!email || !password) {
     return next(new ErrorResponse());
   }

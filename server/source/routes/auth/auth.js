@@ -5,6 +5,12 @@ const bodyParser = require('body-parser');
 
 const { loginUser, signinUser, refresh } = require('../../controllers/auth');
 
+const {
+  assertSignIn,
+  assertLogIn,
+  assertRefresh,
+} = require('../../middleware/joi');
+
 /**
  * @swagger
  * /auth/signin:
@@ -32,7 +38,7 @@ const { loginUser, signinUser, refresh } = require('../../controllers/auth');
  *      '403':
  *        description: Provided cridentials are invalid
  */
-router.post('/signin', bodyParser.json(), signinUser);
+router.post('/signin', bodyParser.json(), assertSignIn, signinUser);
 
 /**
  * @swagger
@@ -70,7 +76,7 @@ router.post('/signin', bodyParser.json(), signinUser);
  *        description: User with provided email doesn't exists
  */
 
-router.post('/login', bodyParser.json(), loginUser);
+router.post('/login', bodyParser.json(), assertLogIn, loginUser);
 /**
  * @swagger
  * /auth/refresh:
@@ -101,6 +107,6 @@ router.post('/login', bodyParser.json(), loginUser);
  *      '404':
  *        description: Provided refresh token is invalid
  */
-router.post('/refresh', bodyParser.json(), refresh);
+router.post('/refresh', bodyParser.json(), assertRefresh, refresh);
 
 module.exports = router;
