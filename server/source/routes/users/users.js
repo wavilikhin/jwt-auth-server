@@ -3,6 +3,8 @@ const router = express.Router();
 
 const { listUsers, findUser, logOut } = require('../../controllers/users');
 
+const { assertFindOne, assertLogOut } = require('../../middleware/joi');
+
 /**
  * @swagger
  *
@@ -61,7 +63,7 @@ router.get(`/`, listUsers);
  *                __v:
  *                  type: string
  */
-router.get(`/:id`, findUser);
+router.get(`/:id`, assertFindOne, findUser);
 
 /**
  * @swagger
@@ -77,6 +79,6 @@ router.get(`/:id`, findUser);
  *      '200':
  *        description: OK
  */
-router.patch('/logout', logOut);
+router.patch('/logout', assertLogOut, logOut);
 
 module.exports = router;

@@ -1,4 +1,5 @@
-const { assert } = require('joi');
+const Joi = require('joi');
+const { assert, func } = require('joi');
 const ErrorResponse = require('../helpers/errorResponse');
 
 const { signInSchema, logInSchema, refreshSchema } = require('../model/joi');
@@ -29,5 +30,27 @@ function assertRefresh(req, res, next) {
   }
   next();
 }
+function assertFindOne(req, res, next) {
+  try {
+    assert(req.params.id, Joi.string().guid());
+  } catch (error) {
+    next(new ErrorResponse('JoiError', 403));
+  }
+  next();
+}
 
-module.exports = { assertSignIn, assertLogIn, assertRefresh };
+function assertLogOut(req, res, next) {
+  try {
+    assert(req.user.id, Joi.string().guid());
+  } catch (error) {
+    next(new ErrorResponse('JoiError', 403));
+  }
+}
+
+module.exports = {
+  assertSignIn,
+  assertLogIn,
+  assertRefresh,
+  assertFindOne,
+  assertLogOut,
+};
