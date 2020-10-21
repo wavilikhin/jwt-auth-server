@@ -24,7 +24,7 @@ const { assertFindOne } = require('../../middleware/joi');
  *            schema:
  *              type: array
  */
-router.get(`/`, guard.check(['admin']), listUsers);
+router.get(`/`, listUsers);
 
 /**
  * @swagger
@@ -64,6 +64,6 @@ router.get(`/`, guard.check(['admin']), listUsers);
  *                __v:
  *                  type: string
  */
-router.get(`/:id`, guard.check(['admin']), assertFindOne, findUser);
+router.get(`/:id`, assertFindOne, findUser);
 
 module.exports = router;

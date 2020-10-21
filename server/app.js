@@ -33,6 +33,7 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const jwtAuthStrategy = require('express-jwt');
+const guard = require('express-jwt-permissions')();
 const errorsHandler = require('./source/middleware/errorsHandler');
 
 mongoose.connect(mongoConfig.url, mongoConfig.options);
@@ -49,5 +50,6 @@ app.use(
     algorithms: ['HS256'],
   })
 );
+guard.check(['admin']);
 app.use('/users', require('./source/routes/users/users'));
 app.use(errorsHandler);
