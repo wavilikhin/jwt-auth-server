@@ -39,7 +39,6 @@ mongoose.connect(mongoConfig.url, mongoConfig.options);
 
 app.listen(PORT);
 // https.createServer(options, app).listen(PORT);
-
 app.use(process.env.MODE === 'dev' ? morgan('dev') : morgan('combined'));
 // app.use(cors(corsOptions));
 app.use(helmet());

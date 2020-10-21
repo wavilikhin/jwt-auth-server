@@ -3,7 +3,8 @@ const router = express.Router();
 
 const { listUsers, findUser, logOut } = require('../../controllers/users');
 
-const { assertFindOne, assertLogOut } = require('../../middleware/joi');
+const guard = require('express-jwt-permissions')();
+const { assertFindOne } = require('../../middleware/joi');
 
 /**
  * @swagger
@@ -23,7 +24,7 @@ const { assertFindOne, assertLogOut } = require('../../middleware/joi');
  *            schema:
  *              type: array
  */
-router.get(`/`, listUsers);
+router.get(`/`, guard.check(['admin']), listUsers);
 
 /**
  * @swagger
@@ -63,22 +64,6 @@ router.get(`/`, listUsers);
  *                __v:
  *                  type: string
  */
-router.get(`/:id`, assertFindOne, findUser);
-
-/**
- * @swagger
- *
- * /users/logout:
- *  pathc:
- *    summary: Logs user out
- *    security:
- *    - BearerAuth: []
- *    responses:
- *      '401':
- *        description: Provided Authorization Bearer Token is invalid
- *      '200':
- *        description: OK
- */
-router.patch('/logout', assertLogOut, logOut);
+router.get(`/:id`, guard.check(['admin']), assertFindOne, findUser);
 
 module.exports = router;

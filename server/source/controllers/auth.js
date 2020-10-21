@@ -9,7 +9,6 @@ const { compareSync, hashSync } = require('bcryptjs');
 const validateEmail = require('../helpers/validateEmail');
 const ErrorResponse = require('../helpers/errorResponse');
 
-const { assertSignIn } = require('../model/joi');
 
 async function issueTokenPair(userId) {
   const newRefreshToken = uuid();
@@ -93,4 +92,18 @@ async function refresh(req, res, next) {
   return res.status(200).json(tokenPair);
 }
 
-module.exports = { loginUser, signinUser, refresh };
+async function logOut(req, res) {
+  const { id } = req.user;
+
+  const refreshTokens = await RefreshToken.find({ user_id: id });
+
+  if (refreshTokens) {
+    refreshTokens.forEach(async (token) => {
+      await token.remove();
+    });
+  }
+
+  return res.sendStatus(200);
+}
+
+module.exports = { loginUser, signinUser, refresh, logOut };

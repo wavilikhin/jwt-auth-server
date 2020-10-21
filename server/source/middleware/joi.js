@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { assert, func } = require('joi');
+const { assert } = require('joi');
 const ErrorResponse = require('../helpers/errorResponse');
 
 const { signInSchema, logInSchema, refreshSchema } = require('../model/joi');
@@ -45,7 +45,10 @@ function assertLogOut(req, res, next) {
   } catch (error) {
     next(new ErrorResponse('JoiError', 403));
   }
+  next();
 }
+
+
 
 module.exports = {
   assertSignIn,

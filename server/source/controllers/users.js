@@ -1,5 +1,4 @@
 const User = require('../model/user');
-const RefreshToken = require('../model/refreshTokens');
 
 const ErrorResponse = require('../helpers/errorResponse');
 
@@ -17,18 +16,4 @@ async function findUser(req, res, next) {
   return res.status(200).json(user);
 }
 
-async function logOut(req, res) {
-  const { id } = req.user;
-
-  const refreshTokens = await RefreshToken.find({ user_id: id });
-
-  if (refreshTokens) {
-    refreshTokens.forEach(async (token) => {
-      await token.remove();
-    });
-  }
-
-  return res.sendStatus(200);
-}
-
-module.exports = { listUsers, findUser, logOut };
+module.exports = { listUsers, findUser };

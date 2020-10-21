@@ -2,13 +2,22 @@ const express = require('express');
 const router = express.Router();
 
 const bodyParser = require('body-parser');
+const jwtAuthStrategy = require('express-jwt');
 
-const { loginUser, signinUser, refresh } = require('../../controllers/auth');
+const { accessTokenSecret } = require('../../../config/jwt.config');
+
+const {
+  loginUser,
+  signinUser,
+  refresh,
+  logOut,
+} = require('../../controllers/auth');
 
 const {
   assertSignIn,
   assertLogIn,
   assertRefresh,
+  assertLogOut,
 } = require('../../middleware/joi');
 
 /**
@@ -75,8 +84,8 @@ router.post('/signin', bodyParser.json(), assertSignIn, signinUser);
  *      '404':
  *        description: User with provided email doesn't exists
  */
-
 router.post('/login', bodyParser.json(), assertLogIn, loginUser);
+
 /**
  * @swagger
  * /auth/refresh:
@@ -108,5 +117,29 @@ router.post('/login', bodyParser.json(), assertLogIn, loginUser);
  *        description: Provided refresh token is invalid
  */
 router.post('/refresh', bodyParser.json(), assertRefresh, refresh);
+
+/**
+ * @swagger
+ *
+ * /auth/logout:
+ *  pathc:
+ *    summary: Logs user out
+ *    security:
+ *    - BearerAuth: []
+ *    responses:
+ *      '401':
+ *        description: Provided Authorization Bearer Token is invalid
+ *      '200':
+ *        description: OK
+ */
+router.patch(
+  '/logout',
+  jwtAuthStrategy({
+    secret: accessTokenSecret,
+    algorithms: ['HS256'],
+  }),
+  assertLogOut,
+  logOut
+);
 
 module.exports = router;
