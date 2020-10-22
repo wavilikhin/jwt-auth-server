@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const { assert } = require('joi');
-const ErrorResponse = require('../helpers/errorResponse');
+const { ErrorResponse } = require('../helpers/errorResponse');
 
 const { signInSchema, logInSchema, refreshSchema } = require('../model/joi');
 

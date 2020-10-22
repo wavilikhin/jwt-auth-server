@@ -5,4 +5,4 @@ function validateEmail(email) {
   return regex.test(String(email).toLowerCase());
 }
 
-module.exports = validateEmail;
+module.exports = { validateEmail };

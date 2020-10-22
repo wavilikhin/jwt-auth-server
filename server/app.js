@@ -53,3 +53,7 @@ app.use(
 guard.check(['admin']);
 app.use('/users', require('./source/routes/users/users'));
 app.use(errorsHandler);
+
+const { ErrorResponse } = require('./source/helpers/errorResponse');
+const e = new ErrorResponse();
+console.log(e.name, e.statusCode);

@@ -1,6 +1,6 @@
 const User = require('../model/user');
 
-const ErrorResponse = require('../helpers/errorResponse');
+const { ErrorResponse } = require('../helpers/errorResponse');
 
 async function listUsers(req, res) {
   const users = await User.find({}).lean();

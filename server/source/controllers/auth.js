@@ -6,8 +6,8 @@ const jwt = require('jsonwebtoken');
 const { v4: uuid } = require('uuid');
 const { compareSync, hashSync } = require('bcryptjs');
 
-const validateEmail = require('../helpers/validateEmail');
-const ErrorResponse = require('../helpers/errorResponse');
+const { validateEmail } = require('../helpers/validateEmail');
+const { ErrorResponse } = require('../helpers/errorResponse');
 
 async function issueTokenPair(userId) {
   const newRefreshToken = uuid();
