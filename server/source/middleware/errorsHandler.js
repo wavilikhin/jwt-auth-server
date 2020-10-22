@@ -1,28 +1,28 @@
+// eslint-disable-next-line no-unused-vars
 const errorsHandler = (err, req, res, next) => {
-  console.log(err);
   switch (err.name) {
     case 'CridentialsError':
-      res.sendStatus(err.statusCode || 403);
+      next(res.sendStatus(err.statusCode || 403));
       break;
 
     case 'UnauthorizedError':
-      res.sendStatus(err.statusCode || 401);
+      next(res.sendStatus(err.statusCode || 401));
       break;
 
     case 'NoEnt':
-      res.sendStatus(err.statusCode || 404);
+      next(res.sendStatus(err.statusCode || 404));
       break;
 
     case 'JoiError':
-      res.sendStatus(err.statusCode || 403);
+      next(res.sendStatus(err.statusCode || 403));
       break;
 
     case 'CorsError':
-      res.sendStatus(err.statusCode || 500);
+      next(res.sendStatus(err.statusCode || 500));
       break;
 
     default:
-      res.sendStatus(500);
+      next(res.sendStatus(500));
   }
 };
 

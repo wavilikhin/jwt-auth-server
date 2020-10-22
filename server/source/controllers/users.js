@@ -11,7 +11,7 @@ async function findUser(req, res, next) {
   const { id } = req.params;
   const user = await User.findOne({ user_id: id }).lean();
 
-  if (!user) next(new ErrorResponse(`NoEnt`, 404));
+  if (!user) next(new ErrorResponse('NoEnt', 404));
 
   return res.status(200).json(user);
 }

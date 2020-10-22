@@ -1,7 +1,9 @@
 {
-  "plugins": ["prettier","security"],
-  "extends": ["prettier","node", "plugin:security/recommended"],
+  "plugins": ["prettier", "security"],
+  "extends": ["prettier", "node", "plugin:security/recommended"],
   "rules": {
-    "prettier/prettier": ["error"]
+    "prettier/prettier": ["off"],
+    "import/no-commonjs": 0,
+    "quotes": ["error", "single"]
   }
 }

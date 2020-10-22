@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const { listUsers, findUser, logOut } = require('../../controllers/users');
+const { listUsers, findUser } = require('../../controllers/users');
 
-const guard = require('express-jwt-permissions')();
 const { assertFindOne } = require('../../middleware/joi');
 
 /**
@@ -24,7 +23,7 @@ const { assertFindOne } = require('../../middleware/joi');
  *            schema:
  *              type: array
  */
-router.get(`/`, listUsers);
+router.get('/', listUsers);
 
 /**
  * @swagger
@@ -64,6 +63,6 @@ router.get(`/`, listUsers);
  *                __v:
  *                  type: string
  */
-router.get(`/:id`, assertFindOne, findUser);
+router.get('/:id', assertFindOne, findUser);
 
 module.exports = router;

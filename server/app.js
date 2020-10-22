@@ -1,7 +1,7 @@
-require(`dotenv`).config();
+require('dotenv').config();
 
 // const https = require('https');
-const fs = require('fs');
+// const fs = require("fs");
 
 const express = require('express');
 const app = express();
@@ -24,11 +24,11 @@ const app = express();
 
 const PORT = process.env.PORT;
 
-const cors = require('cors');
+// const cors = require("cors");
 const mongoose = require('mongoose');
 const mongoConfig = require('./config/mongo.config');
 
-const swaggerJsDoc = require('swagger-jsdoc');
+// const swaggerJsDoc = require("swagger-jsdoc");
 
 const helmet = require('helmet');
 const morgan = require('morgan');

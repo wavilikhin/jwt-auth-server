@@ -9,7 +9,6 @@ const { compareSync, hashSync } = require('bcryptjs');
 const validateEmail = require('../helpers/validateEmail');
 const ErrorResponse = require('../helpers/errorResponse');
 
-
 async function issueTokenPair(userId) {
   const newRefreshToken = uuid();
 
@@ -83,7 +82,7 @@ async function refresh(req, res, next) {
   const dbToken = await RefreshToken.findOne({ refresh_token: refreshToken });
 
   if (!dbToken) {
-    return next(new ErrorResponse(`NoEnt`, 404));
+    return next(new ErrorResponse('NoEnt', 404));
   }
 
   const tokenPair = await issueTokenPair(dbToken.user_id);

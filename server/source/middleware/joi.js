@@ -48,8 +48,6 @@ function assertLogOut(req, res, next) {
   next();
 }
 
-
-
 module.exports = {
   assertSignIn,
   assertLogIn,
