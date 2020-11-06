@@ -1,15 +1,7 @@
 require('dotenv').config();
 
-// const https = require('https');
-// const fs = require("fs");
-
 const express = require('express');
 const app = express();
-
-// const options = {
-//   key: fs.readFileSync('/srv/www/keys/my-site-key.pem'),
-//   cert: fs.readFileSync('/srv/www/keys/chain.pem'),
-// };
 
 // const whitelist = require('./config/cors.config');
 // const corsOptions = {
@@ -28,8 +20,6 @@ const PORT = process.env.PORT;
 const mongoose = require('mongoose');
 const mongoConfig = require('./config/mongo.config');
 
-// const swaggerJsDoc = require("swagger-jsdoc");
-
 const helmet = require('helmet');
 const morgan = require('morgan');
 const jwtAuthStrategy = require('express-jwt');
@@ -39,10 +29,19 @@ const errorsHandler = require('./source/middleware/errorsHandler');
 mongoose.connect(mongoConfig.url, mongoConfig.options);
 
 app.listen(PORT);
-// https.createServer(options, app).listen(PORT);
 app.use(process.env.MODE === 'dev' ? morgan('dev') : morgan('combined'));
 // app.use(cors(corsOptions));
 app.use(helmet());
+
+// app.get('/test', (req, res) => {
+//   console.log('Handling request...');
+//   setTimeout(() => {
+//     console.log('Data collected');
+//   }, 3000);
+//   console.log('Request successfully fulfilled');
+//   res.json({ success: true }).status(200);
+// });
+
 app.use('/auth', require('./source/routes/auth/auth'));
 app.use(
   jwtAuthStrategy({
@@ -54,6 +53,4 @@ guard.check(['admin']);
 app.use('/users', require('./source/routes/users/users'));
 app.use(errorsHandler);
 
-const { ErrorResponse } = require('./source/helpers/errorResponse');
-const e = new ErrorResponse();
-console.log(e.name, e.statusCode);
+module.exports = app;
