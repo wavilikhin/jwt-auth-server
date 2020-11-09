@@ -28,6 +28,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-security": "^1.4.0",
     "mongodb-memory-server": "^6.9.2",
+    "nyc": "^15.1.0",
     "prettier": "2.1.2",
     "supertest": "^6.0.1"
   },
@@ -35,11 +36,14 @@
     "lint": "eslint . --fix",
     "dev": "NODE_ENV=dev nodemon app.js --exec \"npm run lint && node\"",
     "prod": "NODE_ENV=prod node app.js",
-    "test": "ava --serial"
+    "test": "NODE_ENV=test ava --serial --verbose",
+    "test:nyc": "NODE_ENV=test npx nyc npm test"
   },
   "ava": {
     "files": [
-      "source/test/**/*.js"
+      "source/test/routes/*.js",
+      "source/test/helpers/*.js",
+      "source/test/app.js"
     ],
     "require": [
       "babel-register",

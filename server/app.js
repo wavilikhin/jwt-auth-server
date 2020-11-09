@@ -11,7 +11,9 @@ function createApp() {
   const guard = require(`express-jwt-permissions`)();
   const errorsHandler = require(`./source/middleware/errorsHandler`);
 
-  app.use(process.env.MODE === `dev` ? morgan(`dev`) : morgan(`combined`));
+  process.env.NODE_ENV === `test`
+    ? ``
+    : app.use(process.env.MODE === `dev` ? morgan(`dev`) : morgan(`combined`));
 
   app.use(helmet());
 

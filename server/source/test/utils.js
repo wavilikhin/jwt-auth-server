@@ -21,7 +21,14 @@ async function beforeEach(t) {
     password: hashSync(`fakepass123`, 8),
   };
 
+  const newerUser = {
+    id: uuid(),
+    email: `fakeish@mail.com`,
+    password: hashSync(`fakepass123`, 8),
+  };
+
   await new User(newUser).save();
+  await new User(newerUser).save();
 
   t.context.app = app;
 }

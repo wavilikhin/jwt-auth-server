@@ -9,7 +9,7 @@ async function listUsers(req, res) {
 
 async function findUser(req, res, next) {
   const { id } = req.params;
-  const user = await User.findOne({ user_id: id }).lean();
+  const user = await User.findOne({ id }).lean();
 
   if (!user) next(new ErrorResponse(`NoEnt`, 404));
 
