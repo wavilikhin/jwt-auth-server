@@ -1,9 +1,9 @@
-const express = require('express');
+const express = require(`express`);
 const router = express.Router();
 
-const { listUsers, findUser } = require('../../controllers/users');
+const { listUsers, findUser } = require(`../../controllers/users`);
 
-const { assertFindOne } = require('../../middleware/joi');
+const { assertFindOne } = require(`../../middleware/joi`);
 
 /**
  * @swagger
@@ -23,7 +23,7 @@ const { assertFindOne } = require('../../middleware/joi');
  *            schema:
  *              type: array
  */
-router.get('/', listUsers);
+router.get(`/`, listUsers);
 
 /**
  * @swagger
@@ -63,6 +63,6 @@ router.get('/', listUsers);
  *                __v:
  *                  type: string
  */
-router.get('/:id', assertFindOne, findUser);
+router.get(`/:id`, assertFindOne, findUser);
 
 module.exports = router;

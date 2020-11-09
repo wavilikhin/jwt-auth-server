@@ -1,15 +1,15 @@
-const { accessTokenSecret, options } = require('../../config/jwt.config');
-const RefreshToken = require('../model/refreshTokens');
-const User = require('../model/user');
+const { accessTokenSecret, options } = require(`../../config/jwt.config`);
+const RefreshToken = require(`../model/refreshTokens`);
+const { User } = require(`../model/user`);
 
-const jwt = require('jsonwebtoken');
-const { v4: uuid } = require('uuid');
-const { compareSync, hashSync } = require('bcryptjs');
+const jwt = require(`jsonwebtoken`);
+const { v4: uuid } = require(`uuid`);
+const { compareSync, hashSync } = require(`bcryptjs`);
 
-const { validateEmail } = require('../helpers/validateEmail');
-const { ErrorResponse } = require('../helpers/errorResponse');
+const { validateEmail } = require(`../helpers/validateEmail`);
+const { ErrorResponse } = require(`../helpers/errorResponse`);
 
-async function issueTokenPair(userId) {
+async function issueTokenPair(userId, customOptions) {
   const newRefreshToken = uuid();
 
   await new RefreshToken({
@@ -18,7 +18,11 @@ async function issueTokenPair(userId) {
   }).save();
 
   return {
-    token: jwt.sign({ id: userId }, accessTokenSecret, options),
+    token: jwt.sign(
+      { id: userId },
+      accessTokenSecret,
+      customOptions || options
+    ),
     refreshToken: newRefreshToken,
   };
 }
@@ -68,7 +72,7 @@ async function loginUser(req, res, next) {
   const user = await User.findOne({ email }).lean();
 
   if (!user || !compareSync(password, user.password)) {
-    return next(new ErrorResponse('NoEnt', 404));
+    return next(new ErrorResponse(`NoEnt`, 403));
   }
 
   const tokenPair = await issueTokenPair(user.id);
@@ -82,7 +86,7 @@ async function refresh(req, res, next) {
   const dbToken = await RefreshToken.findOne({ refresh_token: refreshToken });
 
   if (!dbToken) {
-    return next(new ErrorResponse('NoEnt', 404));
+    return next(new ErrorResponse(`NoEnt`, 404));
   }
 
   const tokenPair = await issueTokenPair(dbToken.user_id);
@@ -105,4 +109,4 @@ async function logOut(req, res) {
   return res.sendStatus(200);
 }
 
-module.exports = { loginUser, signinUser, refresh, logOut };
+module.exports = { loginUser, signinUser, refresh, logOut, issueTokenPair };

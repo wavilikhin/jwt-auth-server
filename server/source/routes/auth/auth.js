@@ -1,24 +1,24 @@
-const express = require('express');
+const express = require(`express`);
 const router = express.Router();
 
-const bodyParser = require('body-parser');
-const jwtAuthStrategy = require('express-jwt');
+const bodyParser = require(`body-parser`);
+const jwtAuthStrategy = require(`express-jwt`);
 
-const { accessTokenSecret } = require('../../../config/jwt.config');
+const { accessTokenSecret } = require(`../../../config/jwt.config`);
 
 const {
   loginUser,
   signinUser,
   refresh,
   logOut,
-} = require('../../controllers/auth');
+} = require(`../../controllers/auth`);
 
 const {
   assertSignIn,
   assertLogIn,
   assertRefresh,
   assertLogOut,
-} = require('../../middleware/joi');
+} = require(`../../middleware/joi`);
 
 /**
  * @swagger
@@ -47,7 +47,7 @@ const {
  *      '403':
  *        description: Provided cridentials are invalid
  */
-router.post('/signin', bodyParser.json(), assertSignIn, signinUser);
+router.post(`/signin`, bodyParser.json(), assertSignIn, signinUser);
 
 /**
  * @swagger
@@ -84,7 +84,7 @@ router.post('/signin', bodyParser.json(), assertSignIn, signinUser);
  *      '404':
  *        description: User with provided email doesn't exists
  */
-router.post('/login', bodyParser.json(), assertLogIn, loginUser);
+router.post(`/login`, bodyParser.json(), assertLogIn, loginUser);
 
 /**
  * @swagger
@@ -116,7 +116,7 @@ router.post('/login', bodyParser.json(), assertLogIn, loginUser);
  *      '404':
  *        description: Provided refresh token is invalid
  */
-router.post('/refresh', bodyParser.json(), assertRefresh, refresh);
+router.post(`/refresh`, bodyParser.json(), assertRefresh, refresh);
 
 /**
  * @swagger
@@ -133,10 +133,10 @@ router.post('/refresh', bodyParser.json(), assertRefresh, refresh);
  *        description: OK
  */
 router.patch(
-  '/logout',
+  `/logout`,
   jwtAuthStrategy({
     secret: accessTokenSecret,
-    algorithms: ['HS256'],
+    algorithms: [`HS256`],
   }),
   assertLogOut,
   logOut

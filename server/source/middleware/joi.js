@@ -1,24 +1,23 @@
-const Joi = require('joi');
-const { assert } = require('joi');
-const { ErrorResponse } = require('../helpers/errorResponse');
+const Joi = require(`joi`);
+const { assert } = require(`joi`);
+const { ErrorResponse } = require(`../helpers/errorResponse`);
 
-const { signInSchema, logInSchema, refreshSchema } = require('../model/joi');
+const { signInSchema, logInSchema, refreshSchema } = require(`../model/joi`);
 
 function assertSignIn(req, res, next) {
   try {
     assert(req.body, signInSchema);
   } catch (error) {
-    next(new ErrorResponse('JoiError', 403));
+    next(new ErrorResponse(`JoiError`, 403));
   }
   next();
 }
 function assertLogIn(req, res, next) {
   try {
-    console.log('trying to assert login');
     assert(req.body, logInSchema);
   } catch (error) {
-    console.log('login error');
-    next(new ErrorResponse('JoiError', 403));
+    console.log(`login error`);
+    next(new ErrorResponse(`JoiError`, 403));
   }
   next();
 }
@@ -26,7 +25,7 @@ function assertRefresh(req, res, next) {
   try {
     assert(req.body, refreshSchema);
   } catch (error) {
-    next(new ErrorResponse('JoiError', 403));
+    next(new ErrorResponse(`JoiError`, 403));
   }
   next();
 }
@@ -34,7 +33,7 @@ function assertFindOne(req, res, next) {
   try {
     assert(req.params.id, Joi.string().guid());
   } catch (error) {
-    next(new ErrorResponse('JoiError', 403));
+    next(new ErrorResponse(`JoiError`, 403));
   }
   next();
 }
@@ -43,7 +42,7 @@ function assertLogOut(req, res, next) {
   try {
     assert(req.user.id, Joi.string().guid());
   } catch (error) {
-    next(new ErrorResponse('JoiError', 403));
+    next(new ErrorResponse(`JoiError`, 403));
   }
   next();
 }

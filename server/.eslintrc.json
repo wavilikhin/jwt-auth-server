@@ -4,6 +4,7 @@
   "rules": {
     "prettier/prettier": ["off"],
     "import/no-commonjs": 0,
-    "quotes": ["error", "single"]
+    "quotes": ["error", "backtick"],
+    "detect-non-literal-require": 0
   }
 }
