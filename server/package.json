@@ -42,8 +42,7 @@
   "ava": {
     "files": [
       "source/test/routes/*.js",
-      "source/test/helpers/*.js",
-      "source/test/app.js"
+      "source/test/helpers/*.js"
     ],
     "require": [
       "babel-register",

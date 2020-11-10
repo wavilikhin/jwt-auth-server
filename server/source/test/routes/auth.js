@@ -133,14 +133,14 @@ test.serial(`Multiple refresh tokens are valid`, async (t) => {
   });
   const secondRefreshToken = secondLoginRequest.body.refreshToken;
 
-  const firstRefreshRequest = await app.post('/auth/refresh').send({
+  const firstRefreshRequest = await app.post(`/auth/refresh`).send({
     refreshToken: firstRefreshToken,
   });
   t.is(firstRefreshRequest.status, 200);
   t.is(!!firstRefreshRequest.body.token, true);
   t.is(!!firstRefreshRequest.body.refreshToken, true);
 
-  const secondRefreshRequest = await app.post('/auth/refresh').send({
+  const secondRefreshRequest = await app.post(`/auth/refresh`).send({
     refreshToken: secondRefreshToken,
   });
   t.is(secondRefreshRequest.status, 200);
@@ -245,6 +245,7 @@ test.serial(`Find by id request returns 404 on invalid id`, async (t) => {
   t.is(findByIdRequest.status, 403);
   t.deepEqual(findByIdRequest.body, {});
 });
+
 test.todo(`Route is only accessable for admins`);
 
 test.after(after);

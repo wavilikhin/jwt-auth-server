@@ -24,3 +24,5 @@ services:
       - ./nginx/logs:/etc/nginx/logs
     ports:
       - '80:80'
+    depends_on:
+      - auth_server

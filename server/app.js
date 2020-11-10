@@ -1,6 +1,8 @@
 require(`dotenv`).config();
 
 const PORT = process.env.PORT;
+const mongoose = require(`mongoose`);
+const mongoConfig = require(`./config/mongo.config`);
 
 function createApp() {
   const express = require(`express`);
@@ -8,12 +10,19 @@ function createApp() {
   const helmet = require(`helmet`);
   const morgan = require(`morgan`);
   const jwtAuthStrategy = require(`express-jwt`);
-  const guard = require(`express-jwt-permissions`)();
+  // TODO Написать свой чекер админа через монгус
   const errorsHandler = require(`./source/middleware/errorsHandler`);
 
-  process.env.NODE_ENV === `test`
-    ? ``
-    : app.use(process.env.MODE === `dev` ? morgan(`dev`) : morgan(`combined`));
+  switch (process.env.NODE_ENV) {
+    case `dev`:
+      app.use(morgan(`dev`));
+      break;
+    case `test`:
+      break;
+    default:
+      app.use(morgan(`combined`));
+      break;
+  }
 
   app.use(helmet());
 
@@ -28,7 +37,6 @@ function createApp() {
       algorithms: [`HS256`],
     })
   );
-  guard.check([`admin`]);
   app.use(`/users`, require(`./source/routes/users/users`));
   app.use(errorsHandler);
 
@@ -42,10 +50,13 @@ process.on(`uncaughtException`, (err) => {
 
 if (!module.parent) {
   createApp().listen(PORT);
-  const mongoose = require(`mongoose`);
-  const mongoConfig = require(`./config/mongo.config`);
 
   mongoose.connect(mongoConfig.url, mongoConfig.options);
 }
 
 module.exports = createApp;
+
+// const { issueTokenPair } = require(`./source/controllers/auth`);
+// (async () => {
+//   console.log(await issueTokenPair(123));
+// })();
