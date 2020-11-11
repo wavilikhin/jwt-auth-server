@@ -1,18 +1,25 @@
-const User = require(`../model/user`);
+const { User } = require(`../model/user`);
 const { ErrorResponse } = require(`../helpers/errorResponse`);
 
-const check = async (err, req, res, next, array) => {
-  if (!req.User) next(new ErrorResponse(`NoPermissions`, 401));
+const check = (object) => async (req, res, next) => {
+  if (!req.user) next(new ErrorResponse(`PermissionDenied`, 401));
 
   const user = await User.findOne({ id: req.user.id });
 
-  array.forEach((obj) => {
-    const permissionName = Object.keys(obj)[0];
-    const permissionValue = Object.values(obj)[0];
+  if (!user) {
+    return next(new ErrorResponse(`PermissionDenied`, 401));
+  }
 
-    if (user[permissionName] !== permissionValue)
-      next(new ErrorResponse(`NoPermissions`, 401));
+  const permissionNames = Object.keys(object);
+
+  permissionNames.forEach((name) => {
+    // eslint-disable-next-line security/detect-object-injection
+    if (!user[name] || user[name] !== object[name]) {
+      return next(new ErrorResponse(`PermissionDenied`, 401));
+    }
   });
+
+  next();
 };
 
 module.exports = check;

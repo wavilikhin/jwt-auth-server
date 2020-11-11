@@ -21,6 +21,10 @@ const errorsHandler = (err, req, res, next) => {
       next(res.sendStatus(err.statusCode || 500));
       break;
 
+    case `PermissionDenied`:
+      next(res.sendStatus(err.statusCode || 401));
+      break;
+
     default:
       next(res.sendStatus(500));
   }

@@ -6,7 +6,6 @@ const createApp = require(`../../../app`);
 const app = request(createApp());
 
 const { User } = require(`../../model/user`);
-const { issueTokenPair } = require(`../../controllers/auth`);
 
 test.before(before);
 test.beforeEach(beforeEach);
@@ -98,6 +97,21 @@ test.serial(`User gets 404 on invalid refresh token`, async (t) => {
   t.is(updateAccessTokenRequest.status, 404);
 });
 
+test.serial(`User can successfuly logout`, async (t) => {
+  const loginRequest = await app.post(`/auth/login`).send({
+    email: `fake@mail.com`,
+    password: `fakepass123`,
+  });
+
+  const accessToken = loginRequest.body.token;
+
+  const logOutRequest = await app
+    .patch(`/auth/logout`)
+    .set(`Authorization`, `Bearer ${accessToken}`);
+
+  t.is(logOutRequest.status, 200);
+});
+
 test.serial(`Refresh tokens becomes invalid on logout`, async (t) => {
   const loginRequest = await app.post(`/auth/login`).send({
     email: `fake@mail.com`,
@@ -169,83 +183,5 @@ test.serial(`User can use refresh token only once`, async (t) => {
 
   t.is(secondRefreshRequest.status, 404);
 });
-
-// users
-test.serial(
-  `User get 401 on list all users request without valid access token`,
-  async (t) => {
-    const newTokenPair = await issueTokenPair(1234);
-    const invalidToken = Array.from(newTokenPair.token).reverse().toString();
-
-    const listRequest = await app
-      .get(`/users`)
-      .set(`Authorization`, `Bearer ${invalidToken}`);
-
-    t.is(listRequest.status, 401);
-  }
-);
-
-test.serial(
-  `List all users request works well with correct access token`,
-  async (t) => {
-    const newTokenPair = await issueTokenPair(1234);
-
-    const listRequest = await app
-      .get(`/users`)
-      .set(`Authorization`, `Bearer ${newTokenPair.token}`);
-
-    t.is(listRequest.status, 200);
-    t.is(!!listRequest.body.length, true);
-    t.is(listRequest.body.length, 2);
-  }
-);
-
-test.serial(`User recieves 401 on expired token`, async (t) => {
-  const newTokenPair = await issueTokenPair(123, { expiresIn: `500ms` });
-
-  const listUsersRequest = await app
-    .get(`/users`)
-    .set(`Authorization`, `Bearer ${newTokenPair.token}`);
-
-  t.is(listUsersRequest.status, 401);
-});
-
-test.serial(`Find user by id request works well`, async (t) => {
-  const newTokenPair = await issueTokenPair(1234);
-
-  const listRequest = await app
-    .get(`/users`)
-    .set(`Authorization`, `Bearer ${newTokenPair.token}`);
-
-  const user_id = listRequest.body[0].id;
-
-  const findByIdRequest = await app
-    .get(`/users/${user_id}`)
-    .set(`Authorization`, `Bearer ${newTokenPair.token}`)
-    .set(`Accept`, `application/json`);
-
-  t.is(findByIdRequest.status, 200);
-  t.is(!!findByIdRequest.body, true);
-  t.like(listRequest.body[0], findByIdRequest.body);
-});
-
-test.serial(`Find by id request returns 404 on invalid id`, async (t) => {
-  const newTokenPair = await issueTokenPair(1234);
-
-  const listRequest = await app
-    .get(`/users`)
-    .set(`Authorization`, `Bearer ${newTokenPair.token}`);
-  const invalid_id = Array.from(listRequest.body[0].id).reverse().join(``);
-
-  const findByIdRequest = await app
-    .get(`/users/${invalid_id}`)
-    .set(`Authorization`, `Bearer ${newTokenPair.token}`)
-    .set(`Accept`, `application/json`);
-
-  t.is(findByIdRequest.status, 403);
-  t.deepEqual(findByIdRequest.body, {});
-});
-
-test.todo(`Route is only accessable for admins`);
 
 test.after(after);

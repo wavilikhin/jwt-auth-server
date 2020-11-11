@@ -27,8 +27,17 @@ async function beforeEach(t) {
     password: hashSync(`fakepass123`, 8),
   };
 
+  const admin = {
+    id: uuid(),
+    email: `admin@mail.com`,
+    password: hashSync(`fakepass123`, 8),
+  };
+
   await new User(newUser).save();
   await new User(newerUser).save();
+  await new User(admin).save();
+
+  await User.findOneAndUpdate({ email: `admin@mail.com` }, { admin: true });
 
   t.context.app = app;
 }

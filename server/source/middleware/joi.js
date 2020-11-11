@@ -16,7 +16,6 @@ function assertLogIn(req, res, next) {
   try {
     assert(req.body, logInSchema);
   } catch (error) {
-    console.log(`login error`);
     next(new ErrorResponse(`JoiError`, 403));
   }
   next();

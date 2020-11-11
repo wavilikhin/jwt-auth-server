@@ -10,7 +10,7 @@ function createApp() {
   const helmet = require(`helmet`);
   const morgan = require(`morgan`);
   const jwtAuthStrategy = require(`express-jwt`);
-  // TODO Написать свой чекер админа через монгус
+  const check = require(`./source/middleware/permissions`);
   const errorsHandler = require(`./source/middleware/errorsHandler`);
 
   switch (process.env.NODE_ENV) {
@@ -37,6 +37,7 @@ function createApp() {
       algorithms: [`HS256`],
     })
   );
+  app.use(check({ admin: true }));
   app.use(`/users`, require(`./source/routes/users/users`));
   app.use(errorsHandler);
 
