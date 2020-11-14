@@ -13,12 +13,9 @@ const {
   logOut,
 } = require(`../../controllers/auth`);
 
-const {
-  assertSignIn,
-  assertLogIn,
-  assertRefresh,
-  assertLogOut,
-} = require(`../../middleware/joi`);
+const { validate } = require(`../../middleware/joi`);
+
+const { signInSchema, logInSchema, refreshSchema } = require(`../../model/joi`);
 
 /**
  * @swagger
@@ -47,7 +44,7 @@ const {
  *      '403':
  *        description: Provided cridentials are invalid
  */
-router.post(`/signin`, bodyParser.json(), assertSignIn, signinUser);
+router.post(`/signin`, bodyParser.json(), validate(signInSchema), signinUser);
 
 /**
  * @swagger
@@ -84,7 +81,7 @@ router.post(`/signin`, bodyParser.json(), assertSignIn, signinUser);
  *      '404':
  *        description: User with provided email doesn't exists
  */
-router.post(`/login`, bodyParser.json(), assertLogIn, loginUser);
+router.post(`/login`, bodyParser.json(), validate(logInSchema), loginUser);
 
 /**
  * @swagger
@@ -116,7 +113,7 @@ router.post(`/login`, bodyParser.json(), assertLogIn, loginUser);
  *      '404':
  *        description: Provided refresh token is invalid
  */
-router.post(`/refresh`, bodyParser.json(), assertRefresh, refresh);
+router.post(`/refresh`, bodyParser.json(), validate(refreshSchema), refresh);
 
 /**
  * @swagger
@@ -138,7 +135,7 @@ router.patch(
     secret: accessTokenSecret,
     algorithms: [`HS256`],
   }),
-  assertLogOut,
+  validate(refreshSchema),
   logOut
 );
 

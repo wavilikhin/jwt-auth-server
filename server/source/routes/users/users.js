@@ -3,7 +3,8 @@ const router = express.Router();
 
 const { listUsers, findUser } = require(`../../controllers/users`);
 
-const { assertFindOne } = require(`../../middleware/joi`);
+const { validate } = require(`../../middleware/joi`);
+const { findOneSchema } = require(`../../model/joi`);
 
 /**
  * @swagger
@@ -63,6 +64,6 @@ router.get(`/`, listUsers);
  *                __v:
  *                  type: string
  */
-router.get(`/:id`, assertFindOne, findUser);
+router.get(`/:id`, validate(findOneSchema), findUser);
 
 module.exports = router;

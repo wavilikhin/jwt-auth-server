@@ -24,4 +24,6 @@ const refreshSchema = Joi.object({
   refreshToken: Joi.string().guid(),
 });
 
-module.exports = { signInSchema, logInSchema, refreshSchema };
+const findOneSchema = Joi.string().guid();
+
+module.exports = { signInSchema, logInSchema, refreshSchema, findOneSchema };
