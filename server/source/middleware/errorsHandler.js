@@ -1,5 +1,7 @@
-// eslint-disable-next-line no-unused-vars
+const writeLog = require(`./logger`);
 const errorsHandler = (err, req, res, next) => {
+  writeLog(err);
+
   switch (err.name) {
     case `CridentialsError`:
       next(res.sendStatus(err.statusCode || 403));

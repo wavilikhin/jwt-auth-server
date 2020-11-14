@@ -3,6 +3,7 @@ require(`dotenv`).config();
 const PORT = process.env.PORT;
 const mongoose = require(`mongoose`);
 const mongoConfig = require(`./config/mongo.config`);
+const writeLog = require(`./source/middleware/logger`);
 
 function createApp() {
   const express = require(`express`);
@@ -44,9 +45,9 @@ function createApp() {
   return app;
 }
 
-// TODO: Подумать что делать с uncaught exeptions
 process.on(`uncaughtException`, (err) => {
-  console.log(err);
+  console.error(`UNCAUGHT EXCEPTION: \n${err}`);
+  writeLog(err);
 });
 
 if (!module.parent) {
@@ -56,8 +57,3 @@ if (!module.parent) {
 }
 
 module.exports = createApp;
-
-// const { issueTokenPair } = require(`./source/controllers/auth`);
-// (async () => {
-//   console.log(await issueTokenPair(123));
-// })();
