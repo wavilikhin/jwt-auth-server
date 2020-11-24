@@ -15,8 +15,6 @@ services:
       - ./server/source/:/server/source
       - ./server/logs/:/server/logs
     command: /bin/sh -c "npm run ${MODE}"
-    ports:
-      - '3030:3030'
 
   nginx:
     image: nginx
