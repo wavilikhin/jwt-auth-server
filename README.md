@@ -6,13 +6,13 @@
 Route | Auth | Headers | Body |
 |---|---|---|---|
 | `/auth/signin` | Not required | [Required](#signinHeaders) | [Required](#signinBody) |
-- - - -
+---
 ### Description: 
 Sign in request to create new user
-- - - -
+
 ### Headers: <a name='signinHeaders'></a> 
 `{ ContentType: "application/json" }`
-- - - -
+
 ### Body: <a name='signinBody'></a> 
 
 #### Requirements:
@@ -42,7 +42,20 @@ schema:
     confirmedPassword: "123456"
 }
 ```
-- - - -
+
 ### Responses:
 
 **200**
+#### Description:
+  Provided cridentials are correct, new user successfuly created and added to DB. 
+  User now cal [login](#login) using provided email and password.
+
+**403**
+#### Description:
+  Provided cridentials aren't correct. Possible causes:
+  1. Request body provides additional fieleds. (only "email", "password" and "confirmedPassord" are allowed)
+  2. Request body field misprinted
+  3. Email's field value is not a valid email address
+  4. Passowrds doesn't match
+
+---
