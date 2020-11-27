@@ -1,3 +1,6 @@
+# Setup:
+
+
 # Requests:
 
 * [Sign in](#signin)
@@ -6,7 +9,7 @@
 Route | Auth | Headers | Body |
 |---|---|---|---|
 | `/auth/signin` | Not required | [Required](#signinHeaders) | [Required](#signinBody) |
----
+
 ### Description: 
 Sign in request to create new user
 
@@ -16,7 +19,7 @@ Sign in request to create new user
 ### Body: <a name='signinBody'></a> 
 
 #### Requirements:
-```
+```javascript
 required: true
 content:
   application/json:
@@ -35,7 +38,7 @@ schema:
 ```
 
 #### Example :
-```
+```javascript
 {
     email: "example@mail.ru",
     password: "123456",
@@ -45,12 +48,12 @@ schema:
 
 ### Responses:
 
-**200**
+:white_check_mark: **200**
 #### Description:
   Provided cridentials are correct, new user successfuly created and added to DB. 
   User now cal [login](#login) using provided email and password.
 
-**403**
+:no_entry_sign: **403**
 #### Description:
   Provided cridentials aren't correct. Possible causes:
   1. Request body provides additional fieleds. (only "email", "password" and "confirmedPassord" are allowed)
