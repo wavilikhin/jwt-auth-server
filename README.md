@@ -5,8 +5,9 @@
 
 * [Sign in](#signin)
 * [Log in](#login)
+* [Refresh](#refresh)
 
-## Sign in <a name ='signin'></a>
+## Sign in ## <a name ='signin'></a>
 Route | Auth | Headers | Body |
 |---|---|---|---|
 | `/auth/signin` | Not required | [Required](#signinHeaders) | [Required](#signinBody) |
@@ -56,6 +57,7 @@ content:
   Provided cridentials are correct, new user successfuly created and added to DB. 
   User now cal [login](#login) using provided email and password.
 
+
 :no_entry_sign: **403**
 #### Description:
   Provided cridentials aren't correct. Possible causes:
@@ -68,7 +70,7 @@ content:
 ## Log in <a name ='login'></a>
 Route | Auth | Headers | Body |
 |---|---|---|---|
-| `/auth/login` | Not required | [Required](#loginHeaders) | [Required](#loginHeaders) |
+| `/auth/login` | Not required | [Required](#loginHeaders) | [Required](#loginBody) |
 
 ### Description: 
 Login request to authenticate user
@@ -124,6 +126,7 @@ content:
           type: string
 ```
 
+
 :no_entry_sign: **403**
 #### Description:
   Provided cridentials aren't correct. 
@@ -134,10 +137,85 @@ content:
   3. Email's field value is not a valid email address
   4. Email's field value is not a valid password
 
+
 :no_entry_sign: **404**
 #### Description:
   Provided cridentials are correct, but user doesn't exsists. 
   
   Possible causes:
   1. Email field's value misprinted
+---
+## Refresh <a name ='refresh'></a>
+Route | Auth | Headers | Body |
+|---|---|---|---|
+| `/auth/refresh` | Not required | [Required](#refreshHeaders) | [Required](#refreshBody) |
+
+### Description: 
+Use it to updates access token with provided refresh token
+
+### Headers: <a name='refreshHeaders'></a> 
+```javascript
+{ ContentType: "application/json" }
+```
+
+### Body: <a name='refreshBody'></a> 
+
+#### Requirements:
+```javascript
+ requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          refreshToken:
+            type: string
+            required: true
+```
+
+#### Example :
+```javascript
+{
+    refreshToken: "16e4bd1c-0b53-452e-b4ce-1d7df202a1d6",
+}
+```
+
+### Responses:
+
+:white_check_mark: **200**
+#### Description:
+  Provided refresh token is valid
+  Returns new *access token* and *refresh token* pair
+  
+##### Response Body:
+```javascript
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        token:
+          type: string
+        refreshToken:
+          type: string
+```
+
+
+:no_entry_sign: **403**
+#### Description:
+  Provided cridentials aren't correct. 
+  
+  Possible causes:
+  1. Request body provides additional fieleds. (only "refreshToken" is allowed)
+  2. Request body field misprinted
+  3. *refreshToken* filed is not a valid uuid4
+
+
+:no_entry_sign: **404**
+#### Description:
+  Provided cridentials are correct, but refresh token doesnt exists in DB. 
+  
+  Possible causes:
+  1. *refreshToken* field's value misprinted
 ---
