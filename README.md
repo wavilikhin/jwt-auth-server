@@ -4,6 +4,7 @@
 # Requests:
 
 * [Sign in](#signin)
+* [Log in](#login)
 
 ## Sign in <a name ='signin'></a>
 Route | Auth | Headers | Body |
@@ -14,7 +15,9 @@ Route | Auth | Headers | Body |
 Sign in request to create new user
 
 ### Headers: <a name='signinHeaders'></a> 
-`{ ContentType: "application/json" }`
+```javascript
+{ ContentType: "application/json" }
+```
 
 ### Body: <a name='signinBody'></a> 
 
@@ -23,18 +26,18 @@ Sign in request to create new user
 required: true
 content:
   application/json:
-schema:
-  type: object
-  properties:
-    email:
-      type: string
-      required: true
-    password:
-      type: string
-      required: true
-    confirmedPassword:
-      type: string
-      required: true
+    schema:
+      type: object
+      properties:
+        email:
+          type: string
+          required: true
+        password:
+          type: string
+          required: true
+        confirmedPassword:
+          type: string
+          required: true
 ```
 
 #### Example :
@@ -48,7 +51,7 @@ schema:
 
 ### Responses:
 
-:white_check_mark: **200**
+:white_check_mark: **201**
 #### Description:
   Provided cridentials are correct, new user successfuly created and added to DB. 
   User now cal [login](#login) using provided email and password.
@@ -61,4 +64,80 @@ schema:
   3. Email's field value is not a valid email address
   4. Passowrds doesn't match
 
+---
+## Log in <a name ='login'></a>
+Route | Auth | Headers | Body |
+|---|---|---|---|
+| `/auth/login` | Not required | [Required](#loginHeaders) | [Required](#loginHeaders) |
+
+### Description: 
+Login request to authenticate user
+
+### Headers: <a name='loginHeaders'></a> 
+```javascript
+{ ContentType: "application/json" }
+```
+
+### Body: <a name='loginBody'></a> 
+
+#### Requirements:
+```javascript
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        email:
+          type: string
+          required: true
+        password:
+          type: string
+          required: true
+```
+
+#### Example :
+```javascript
+{
+    email: "example@mail.ru",
+    password: "123456",
+}
+```
+
+### Responses:
+
+:white_check_mark: **200**
+#### Description:
+  Provided cridential are valid.
+  Returns signed *access token* with user's id(uuid4) in DB,  wich expires after **15 min** (by default) and *refresh token*    wich should be used to update *access token*  
+  
+##### Response Body:
+```javascript
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        token:
+          type: string
+        refreshToken:
+          type: string
+```
+
+:no_entry_sign: **403**
+#### Description:
+  Provided cridentials aren't correct. 
+  
+  Possible causes:
+  1. Request body provides additional fieleds. (only "email" and "password")
+  2. Request body field misprinted
+  3. Email's field value is not a valid email address
+  4. Email's field value is not a valid password
+
+:no_entry_sign: **404**
+#### Description:
+  Provided cridentials are correct, but user doesn't exsists. 
+  
+  Possible causes:
+  1. Email field's value misprinted
 ---
