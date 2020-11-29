@@ -1,5 +1,6 @@
-# Setup:
+# Description:
 
+# Setup:
 
 # Requests:
 
@@ -7,7 +8,7 @@
 * [Log in](#login)
 * [Refresh](#refresh)
 
-## Sign in ## <a name ='signin'></a>
+## Sign in  <a name ='signin'></a>
 Route | Auth | Headers | Body |
 |---|---|---|---|
 | `/auth/signin` | Not required | [Required](#signinHeaders) | [Required](#signinBody) |
@@ -55,13 +56,13 @@ content:
 :white_check_mark: **201**
 #### Description:
   Provided cridentials are correct, new user successfuly created and added to DB. 
-  User now cal [login](#login) using provided email and password.
+  User now can [login](#login) using provided email and password.
 
 
 :no_entry_sign: **403**
 #### Description:
   Provided cridentials aren't correct. Possible causes:
-  1. Request body provides additional fieleds. (only "email", "password" and "confirmedPassord" are allowed)
+  1. Request body provides additional fields. (only "email", "password" and "confirmedPassord" are allowed)
   2. Request body field misprinted
   3. Email's field value is not a valid email address
   4. Passowrds doesn't match
@@ -110,8 +111,8 @@ content:
 
 :white_check_mark: **200**
 #### Description:
-  Provided cridential are valid.
-  Returns signed *access token* with user's id(uuid4) in DB,  wich expires after **15 min** (by default) and *refresh token*    wich should be used to update *access token*  
+  Provided cridential are correct.
+  Returns signed *access token* with user's id(uuid4) in DB,  wich expires after **15 min** (by default) and *refresh token*    wich should be used to update *access token*
   
 ##### Response Body:
 ```javascript
@@ -132,7 +133,7 @@ content:
   Provided cridentials aren't correct. 
   
   Possible causes:
-  1. Request body provides additional fieleds. (only "email" and "password")
+  1. Request body provides additional fields. (only "email" and "password" are allowed)
   2. Request body field misprinted
   3. Email's field value is not a valid email address
   4. Email's field value is not a valid password
@@ -151,7 +152,7 @@ Route | Auth | Headers | Body |
 | `/auth/refresh` | Not required | [Required](#refreshHeaders) | [Required](#refreshBody) |
 
 ### Description: 
-Use it to updates access token with provided refresh token
+Requset for updating expired *access token* using provided *refresh token*
 
 ### Headers: <a name='refreshHeaders'></a> 
 ```javascript
@@ -185,7 +186,7 @@ Use it to updates access token with provided refresh token
 
 :white_check_mark: **200**
 #### Description:
-  Provided refresh token is valid
+  Provided refresh token is valid.
   Returns new *access token* and *refresh token* pair
   
 ##### Response Body:
@@ -207,9 +208,9 @@ content:
   Provided cridentials aren't correct. 
   
   Possible causes:
-  1. Request body provides additional fieleds. (only "refreshToken" is allowed)
+  1. Request body provides additional fields. (only "refreshToken" is allowed)
   2. Request body field misprinted
-  3. *refreshToken* filed is not a valid uuid4
+  3. *refreshToken* filed's value is not a valid UUID
 
 
 :no_entry_sign: **404**
