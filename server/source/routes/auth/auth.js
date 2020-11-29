@@ -119,7 +119,6 @@ router.post(`/refresh`, bodyParser.json(), validate(refreshSchema), refresh);
  * @swagger
  *
  * /auth/logout:
- *  pathc:
  *    summary: Logs user out
  *    security:
  *    - BearerAuth: []
