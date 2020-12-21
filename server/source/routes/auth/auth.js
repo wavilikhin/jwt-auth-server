@@ -7,10 +7,10 @@ const jwtAuthStrategy = require(`express-jwt`);
 const { accessTokenSecret } = require(`../../../config/jwt.config`);
 
 const {
-  loginUser,
-  signinUser,
-  refresh,
-  logOut,
+	loginUser,
+	signinUser,
+	refresh,
+	logOut,
 } = require(`../../controllers/auth`);
 
 const { validate } = require(`../../middleware/joi`);
@@ -113,6 +113,8 @@ router.post(`/login`, bodyParser.json(), validate(logInSchema), loginUser);
  *      '404':
  *        description: Provided refresh token is invalid
  */
+// FIXME: bodyParser is deprecated
+// TODO: Написать тесты для мейлера
 router.post(`/refresh`, bodyParser.json(), validate(refreshSchema), refresh);
 
 /**
@@ -129,13 +131,13 @@ router.post(`/refresh`, bodyParser.json(), validate(refreshSchema), refresh);
  *        description: OK
  */
 router.patch(
-  `/logout`,
-  jwtAuthStrategy({
-    secret: accessTokenSecret,
-    algorithms: [`HS256`],
-  }),
-  validate(refreshSchema),
-  logOut
+	`/logout`,
+	jwtAuthStrategy({
+		secret: accessTokenSecret,
+		algorithms: [`HS256`],
+	}),
+	validate(refreshSchema),
+	logOut,
 );
 
 module.exports = router;
