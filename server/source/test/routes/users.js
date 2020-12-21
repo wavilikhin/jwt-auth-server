@@ -14,7 +14,7 @@ test.afterEach(afterEach);
 
 test.serial(`User get 401 on accessing routes for admins`, async (t) => {
 	const loginRequest = await app.post(`/auth/login`).send({
-		email: `fake@mail.com`,
+		email: `confirmed@mail.com`,
 		password: `fakepass123`,
 	});
 
@@ -46,7 +46,7 @@ test.serial(
 
 		t.is(adminRouteRequest.status, 401);
 		t.deepEqual(adminRouteRequest.body, {});
-	}
+	},
 );
 
 test.serial(
@@ -65,7 +65,7 @@ test.serial(
 
 		t.is(adminRouteRequest.status, 200);
 		t.deepEqual(!!adminRouteRequest.body, true);
-	}
+	},
 );
 
 test.serial(`User recieves 401 on expired token`, async (t) => {

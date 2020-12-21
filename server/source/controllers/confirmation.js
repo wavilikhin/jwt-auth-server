@@ -7,7 +7,7 @@ async function confirmEmail(req, res, next) {
 	const { JWTtoken } = req.params;
 
 	if (!JWTtoken) return next(new ErrorResponse(`NoEnt`, 404));
-
+	// case for tests
 	try {
 		const { id } = jwt.verify(JWTtoken, secret);
 

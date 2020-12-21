@@ -114,6 +114,7 @@ router.post(`/login`, bodyParser.json(), validate(logInSchema), loginUser);
  *        description: Provided refresh token is invalid
  */
 // FIXME: bodyParser is deprecated
+// TODO: Написать тесты для мейлера
 router.post(`/refresh`, bodyParser.json(), validate(refreshSchema), refresh);
 
 /**
@@ -136,7 +137,7 @@ router.patch(
 		algorithms: [`HS256`],
 	}),
 	validate(refreshSchema),
-	logOut
+	logOut,
 );
 
 module.exports = router;
