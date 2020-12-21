@@ -135,7 +135,7 @@ content:
 Provided cridential are correct.
 Returns signed _access token_ with user's id(uuid4) in DB, wich expires after **15 min** (by default) and _refresh token_ wich should be used to update _access token_
 
-##### Response Body:
+##### Response body:
 
 ```javascript
 content:
@@ -147,6 +147,15 @@ content:
           type: string
         refreshToken:
           type: string
+```
+
+##### Response example:
+
+```javascript
+{
+  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5M    DIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+  refreshToken: "580314fc-3d7c-4143-a04f-64928b5f9f43"
+}
 ```
 
 :no_entry_sign: **403**
