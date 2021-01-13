@@ -14,7 +14,7 @@
 | -------------- | ------------ | -------------------------- | ----------------------- |
 | `/auth/signin` | Not required | [Required](#signinHeaders) | [Required](#signinBody) |
 
-### Description:
+### Description
 
 Sign in request to create new user
 
@@ -28,7 +28,7 @@ Sign in request to create new user
 
 ### Body: <a name='signinBody'></a>
 
-#### Requirements:
+#### Requirements
 
 ```javascript
 required: true
@@ -135,7 +135,7 @@ content:
 Provided cridential are correct.
 Returns signed _access token_ with user's id(uuid4) in DB, wich expires after **15 min** (by default) and _refresh token_ wich should be used to update _access token_
 
-##### Response Body:
+##### Response body:
 
 ```javascript
 content:
@@ -147,6 +147,15 @@ content:
           type: string
         refreshToken:
           type: string
+```
+
+##### Response example:
+
+```javascript
+{
+  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+  refreshToken: "580314fc-3d7c-4143-a04f-64928b5f9f43"
+}
 ```
 
 :no_entry_sign: **403**
@@ -240,6 +249,15 @@ content:
           type: string
 ```
 
+##### Response example:
+
+```javascript
+{
+  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+  refreshToken: "580314fc-3d7c-4143-a04f-64928b5f9f43"
+}
+```
+
 :no_entry_sign: **403**
 
 #### Description:
@@ -261,5 +279,71 @@ Provided cridentials are correct, but refresh token doesnt exists in DB.
 Possible causes:
 
 1. _refreshToken_ field's value misprinted
+
+---
+
+## Get users <a name ='users'></a>
+
+| Route     | Auth     | Headers      | Body         |
+| --------- | -------- | ------------ | ------------ |
+| `/users/` | Required | Not required | Not required |
+
+### Description:
+
+Requset for all created users
+
+### Responses:
+
+:white_check_mark: **200**
+
+#### Description:
+
+Provided JWT is correct
+
+##### Response body:
+
+```sh
+content:
+application/json:
+  schema:
+    ArrayOfUsers:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+	  type: string
+	email:
+	  type: string
+	password:
+	  type: string
+	admin:
+	  type: boolean
+	isConfirmed:
+	  type: boolean
+```
+
+##### Response example:
+
+```javascript
+[
+	{
+		id: "1",
+		email: "test@gmail.com",
+		password: "b89eaac7e61417341b710b727768294d0e6a277b",
+		admin: false,
+		isConfirmed: true,
+	},
+];
+```
+
+:no_entry_sign: **401**
+
+#### Description:
+
+Provided cridetials are invalid
+
+1. JWT is invalid
+2. User doesn't have **admin** rights
 
 ---
