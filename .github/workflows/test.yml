@@ -1,0 +1,22 @@
+name: Lint
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+			- dev
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.15.4]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm lint

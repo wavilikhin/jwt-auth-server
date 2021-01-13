@@ -16,7 +16,7 @@ function sendConfirmation(email, jwt) {
 		to: email,
 		subject: `Email confirmation`,
 		html: `<p>To confirm your email plese follow the link:</br><a href=${host}/confirmation/${
-			process.env.NODE_ENV === `test` ? `${'test' + Date.now()}` : jwt
+			process.env.NODE_ENV === `test` ? `${`test` + Date.now()}` : jwt
 		}>confirm</a></p>`,
 	};
 
