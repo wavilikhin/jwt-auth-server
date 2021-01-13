@@ -4,7 +4,8 @@ on:
   pull_request:
   push:
     branches:
-      - dev
+      - master
+			- dev
 
 jobs:
   lint:
@@ -12,6 +13,7 @@ jobs:
     strategy:
       matrix:
         node-version: [14.15.4]
+		working-directory: ./../server
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -19,4 +21,4 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm lint
-		working-directory: ./../server
+
