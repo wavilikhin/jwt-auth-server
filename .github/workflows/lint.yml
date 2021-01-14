@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - [master,dev]
+      - [master, dev]
 
 jobs:
   lint:
@@ -19,4 +19,3 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm lint
-		working-directory: ./../server
