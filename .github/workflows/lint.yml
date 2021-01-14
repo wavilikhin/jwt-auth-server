@@ -1,24 +1,22 @@
-name: Lint
+name: Test
 
 on:
   pull_request:
   push:
     branches:
-      - master
-			- dev
+      - [master,dev]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.15.4]
-		working-directory: ./../server
+        node-version: [14.x]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: npm run lint
-
+      - run: npm lint
+		working-directory: ./../server
