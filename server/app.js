@@ -60,13 +60,3 @@ if (!module.parent) {
 }
 
 module.exports = createApp;
-
-// var transporter = nodemailer.createTransport({
-// 	host: "smtp.yandex.ru",
-// 	port: 465,
-// 	secure: true,
-// 	auth: {
-// 		user: "noreply@arvr.sberlabs.com",
-// 		pass: "llqkykghaommkotp",
-// 	},
-// });
