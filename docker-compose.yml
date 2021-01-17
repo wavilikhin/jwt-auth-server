@@ -14,7 +14,8 @@ services:
       - ./server/config/:/server/config
       - ./server/source/:/server/source
       - ./server/logs/:/server/logs
-    command: /bin/sh -c "npm run ${MODE}"
+    # for development (comment out in production):
+    # command: /bin/sh -c "npm run ${MODE}"
 
   nginx:
     image: nginx

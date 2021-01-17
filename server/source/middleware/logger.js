@@ -4,7 +4,7 @@ const logsPath = `${__dirname}/../../logs`;
 /* eslint-disable */
 function writeLog(error) {
 	let errorLog;
-	process.env.NODE_ENV === `prod`
+	process.env.NODE_ENV === `production`
 		? (errorLog = `\n[${new Date(Date.now())}] - ${error.name}: ${
 				error.message
 		  } :: ${error.stack}`)
