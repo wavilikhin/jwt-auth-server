@@ -51,12 +51,32 @@ function createApp() {
 process.on(`uncaughtException`, (err) => {
 	console.error(`UNCAUGHT EXCEPTION: \n${err.stack}`);
 	writeLog(err);
+	// eslint-disable-next-line no-process-exit
+	process.exit(1);
 });
 
 if (!module.parent) {
-	createApp().listen(PORT);
+	// eslint-disable-next-line no-inner-declarations
+	async function handleShutdown(expressApp, mongooseInstance) {
+		await mongooseInstance.disconnect();
+		await expressApp.close();
+	}
+
+	const app = createApp().listen(PORT);
 
 	mongoose.connect(mongoConfig.url, mongoConfig.options);
+
+	process.on(`SIGTERM`, () => {
+		handleShutdown(app, mongoose);
+	});
+
+	process.on(`SIGINT`, () => {
+		handleShutdown(app, mongoose);
+	});
 }
 
 module.exports = createApp;
+
+setTimeout(() => {
+	throw new Error(`test`);
+}, 5000);

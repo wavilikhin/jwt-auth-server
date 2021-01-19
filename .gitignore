@@ -2,8 +2,3 @@ mongo-data
 .vscode
 .todo.txt
 nginx/logs
-server/node_modules
-server/.env
-server/config/**
-server/.nyc_output
-server/logs/*.log
